@@ -1,3 +1,5 @@
+#VERSION: 
+
 #install rethinkdb on Digital Ocean Ubuntu 12.04 LTS x64 servers
 ---
 - hosts: all
@@ -12,7 +14,7 @@
   - name: install rethinkdb
     apt: pkg=rethinkdb state=present
 
-- hosts: db-nyc
+- hosts: db-master
   tasks:
     - name: ensure group is present
       group: name=rethinkdb state=present
@@ -23,7 +25,7 @@
     - name: start rethinkdb
       service: name=rethinkdb state=restarted
 
-- hosts: db-sf
+- hosts: db-slave
   vars_files:
     - vars.yml  
   tasks:
