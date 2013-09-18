@@ -1,0 +1,37 @@
+#install rethinkdb on Digital Ocean Ubuntu 12.04 LTS x64 servers
+---
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: make sure apt-add-repository is installed
+    apt: pkg=python-software-properties state=present #software-properties-common for Ubuntu 12.10 and later
+  - name: add rethinkdb apt repo
+    apt_repository: repo='ppa:rethinkdb/ppa'
+  - name: update apt
+    apt: update_cache=yes
+  - name: install rethinkdb
+    apt: pkg=rethinkdb state=present
+
+- hosts: db-nyc
+  tasks:
+    - name: ensure group is present
+      group: name=rethinkdb state=present
+    - name: ensure user is present
+      user: name=rethinkdb state=present
+    - name: copy master config file
+      copy: src=./rethink-master.conf dest=/etc/rethinkdb/instances.d/rethink-master.conf owner=rethinkdb group=rethinkdb mode=664
+    - name: start rethinkdb
+      service: name=rethinkdb state=restarted
+
+- hosts: db-sf
+  vars_files:
+    - vars.yml  
+  tasks:
+    - name: ensure group is present
+      group: name=rethinkdb state=present
+    - name: ensure user is present
+      user: name=rethinkdb state=present
+    - name: copy slave template
+      template: src=./rethink-slave.conf.j2 dest=/etc/rethinkdb/instances.d/rethink-slave.conf owner=rethinkdb group=rethinkdb mode=664
+    - name: start rethinkdb
+      service: name=rethinkdb state=restarted
