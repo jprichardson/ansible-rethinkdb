@@ -37,7 +37,7 @@ Todo
 ----
 
 - make OS agnostic
-- different types of configurations
+- different types (single master, multiple slaves, etc) of configurations
 
 
 
