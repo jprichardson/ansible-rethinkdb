@@ -41,6 +41,13 @@ Todo
 
 
 
+Other RethinkDB playbooks
+-------------------------
+
+- https://github.com/nimajalali/ansible-rethinkdb
+
+
+
 License
 -------
 
